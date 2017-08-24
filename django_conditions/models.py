@@ -86,9 +86,3 @@ class AbstractCondition(models.Model):
                     raise Exception(_('Caso de intersección no conocido.'))
         super(AbstractCondition, self).save()
 
-
-class ModelForTesting(models.Model):
-    pass
-
-class ConditionForTesting(AbstractCondition):
-    instance = models.ForeignKey(ModelForTesting)

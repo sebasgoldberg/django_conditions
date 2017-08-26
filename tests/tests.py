@@ -266,4 +266,41 @@ class ConditionTestCase(TestCase):
             instance1, date.today(),
             date(9999, 12, 31), 10)
 
+    def test_current_manager(self):
+
+        instance1 = ModelForTesting.objects.create()
+
+        cond = ConditionForTesting(
+            instance=instance1,
+            value=20,
+            begin_date=date.today()-timedelta(days=20),
+            end_date=date.today()-timedelta(days=1),
+            )
+
+        cond.save()
+
+        cond = ConditionForTesting(
+            instance=instance1,
+            value=20,
+            begin_date=date.today()+timedelta(days=20),
+            end_date=date.today()+timedelta(days=31),
+            )
+
+        cond.save()
+
+        self.assertEquals(ConditionForTesting.current.count(), 0)
+
+        cond = ConditionForTesting(
+            instance=instance1,
+            value=10
+            )
+        
+        cond.save()
+
+        self.assertEquals(ConditionForTesting.current.count(), 1)
+
+        self.check_condition( ConditionForTesting.current.all()[0], 
+            instance1, date.today(),
+            date(9999, 12, 31), 10)
+
 

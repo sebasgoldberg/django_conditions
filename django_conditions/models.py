@@ -7,11 +7,23 @@ OUTSIDE = 2
 BEFORE = 3
 AFTER = 4
 
+
+class CurrentManager(models.Manager):
+
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            begin_date__lte=date.today(),
+            end_date__gte=date.today())
+
 class AbstractCondition(models.Model):
+
     begin_date = models.DateField(_('Fecha de inicio'), default=date.today)
     end_date = models.DateField(_('Fecha de fin'), default=date(9999, 12, 31))
     value = models.DecimalField(max_digits=12, decimal_places=4,
             verbose_name=_('Valor'))
+
+    objects = models.Manager()
+    current = CurrentManager()
 
     class Meta:
         abstract = True

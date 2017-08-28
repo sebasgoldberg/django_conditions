@@ -27,6 +27,7 @@ class AbstractCondition(models.Model):
 
     class Meta:
         abstract = True
+        manager_inheritance_from_future = True
 
     def get_manager(self):
         return type(self).objects
